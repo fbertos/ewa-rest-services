@@ -1,52 +1,39 @@
 package com.ewa.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ewa.model.User;
+import com.ewa.search.Config;
 import com.ewa.service.UserService;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/ewa/user")
 public class UserController {
 	@Autowired
-	private UserService mongo;
+	private UserService service;
 	
-	@RequestMapping(value="/read")
-	@GetMapping
-    public @ResponseBody User getUser(@RequestHeader("Authorization") String ticket) {
-		String port = System.getProperty("server.port");
-		return new User("test from " + port);
-    }
-	
-	@RequestMapping(value="/create")
+	@RequestMapping(value="", produces = "application/json")
 	@PostMapping
-    public @ResponseBody User createUser(@RequestHeader("Authorization") String ticket, @RequestBody User user) {
-		if (ticket == null || !ticket.equals("3423fdsfddd432434dffs20018!!")) {
-			return null;
-		}
+    public @ResponseBody ResponseEntity<User> createUser(@RequestBody User user) {
+		List<User> existing = service.findByEmail(user.getEmail(), new Config("email", "ASC", 0, 1));
 		
-		return new User("test");
-    }
-
-	@RequestMapping(value="/file")
-	@PostMapping
-    public @ResponseBody User createUserWithFile(@RequestHeader("Authorization") String ticket, 
-    		@RequestPart User user,
-    		@RequestPart(value = "file", required = false) MultipartFile file) {
-		if (ticket == null || !ticket.equals("3423fdsfddd432434dffs20018!!")) {
-			return null;
-		}
 		
-		return new User("test");
+		if (existing != null && !existing.isEmpty())
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		
+		user.setStatus(User.Status.PENDING);
+		User newUser = service.create(user);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(newUser);
     }
 }
 

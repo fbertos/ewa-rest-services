@@ -9,6 +9,9 @@ import com.ewa.model.User;
 
 public interface UserRepository extends MongoRepository<User, String> {
 
-	@Query("{ 'name' : ?0 }")
-	Page<User> findByName(String name, Pageable pageable);
+	@Query("{ 'email' : ?0 }")
+	Page<User> findByEmail(String email, Pageable pageable);
+	
+	@Query("{ 'fullName' : ?0 }")
+	Page<User> findByFullName(String fullName, Pageable pageable);
 }

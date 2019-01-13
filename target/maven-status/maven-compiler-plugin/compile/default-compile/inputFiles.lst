@@ -1,0 +1,11 @@
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/ContactRequest.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/search/Config.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/UserService.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/impl/UserServiceImpl.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/User.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/Session.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/Event.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/Application.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/dao/UserRepository.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/controller/UserController.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/CircleOfTrust.java

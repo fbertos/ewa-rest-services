@@ -2,26 +2,17 @@ package com.ewa.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+import org.bson.types.ObjectId;
 
-import com.ewa.dao.UserRepository;
 import com.ewa.model.User;
-import com.ewa.search.Filter;
+import com.ewa.search.Config;
 
-@Service
-public class UserService {
-	@Autowired
-	private UserRepository repository;
-
-	public User save(User u) {
-		return repository.save(u);
-    }
+public interface UserService {
+	public User create(User user);
+	public void update(User user);
+	public User read(ObjectId id);
+	public void delete(User user);
 	
-	public List<User> findByName(String name, Filter filter) {
-		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
-	    return repository.findByName(name, request).getContent();
-	}
+	public List<User> findByFullName(String fullName, Config filter);
+	public List<User> findByEmail(String email, Config filter);
 }
