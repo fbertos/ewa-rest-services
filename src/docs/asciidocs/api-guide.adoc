@@ -1,0 +1,69 @@
+= Users REST Service API Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+= Resources
+
+==  Users Service
+
+The Users provides the entry point into the service.
+
+=== Accessing the read GET service
+
+==== Request structure
+
+include::{snippets}//users/read/http-request.adoc[]
+
+==== Response body
+
+include::{snippets}//users/read/response-body.adoc[]
+
+==== Example response
+
+include::{snippets}//users/read/http-response.adoc[]
+
+
+=== Accessing the create POST service
+
+==== Request structure
+
+include::{snippets}//users/create/http-request.adoc[]
+
+==== Request body
+
+include::{snippets}//users/create/request-body.adoc[]
+
+==== Response body
+
+include::{snippets}//users/create/response-body.adoc[]
+
+==== Response fields
+
+include::{snippets}//users/create/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}//users/create/http-response.adoc[]
+
+
+=== Accessing the file MULTIPART POST service
+
+==== Request structure
+
+include::{snippets}//users/file/http-request.adoc[]
+
+==== Response body
+
+include::{snippets}//users/file/response-body.adoc[]
+
+==== Response fields
+
+include::{snippets}//users/file/response-fields.adoc[]
+
+==== Example response
+
+include::{snippets}//users/file/http-response.adoc[]
