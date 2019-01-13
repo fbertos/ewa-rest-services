@@ -3,7 +3,6 @@ package com.ewa.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,8 +26,8 @@ public class UserServiceImpl implements UserService {
 		repository.save(user);
 	}
 	
-	public User read(ObjectId id) {
-		Optional<User> user = repository.findById(id.toHexString());
+	public User read(String id) {
+		Optional<User> user = repository.findById(id);
 		return (user != null)?user.get():null;
 	}
 	
