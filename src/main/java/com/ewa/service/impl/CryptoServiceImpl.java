@@ -5,8 +5,11 @@ import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.stereotype.Service;
+
 import com.ewa.service.CryptoService;
 
+@Service
 public class CryptoServiceImpl implements CryptoService {
 	public String encode(String text, String password) throws Exception {
         Key aesKey = new SecretKeySpec(password.getBytes(), "AES");
