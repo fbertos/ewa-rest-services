@@ -5,6 +5,7 @@ import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.bson.internal.Base64;
 import org.springframework.stereotype.Service;
 
 import com.ewa.service.CryptoService;
@@ -16,11 +17,11 @@ public class CryptoServiceImpl implements CryptoService {
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, aesKey);
         byte[] encrypted = cipher.doFinal(text.getBytes());
-        return encrypted.toString();
+        return Base64.encode(encrypted);
 	}
 	
 	public String decode(String text, String password) throws Exception {
-        Key aesKey = new SecretKeySpec(password.getBytes(), "AES");
+        Key aesKey = new SecretKeySpec(Base64.decode(password), "AES");
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, aesKey);
         String decrypted = new String(cipher.doFinal(text.getBytes()));

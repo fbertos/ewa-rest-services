@@ -1,10 +1,12 @@
 package com.ewa.controller;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,9 @@ import com.ewa.service.UserService;
 @RestController
 @RequestMapping("/ewa/subscription")
 public class SubscriptionController {
+	@Value("${spring.data.ewa.key}")
+	private String security_key;
+	
 	@Autowired
 	private UserService service;
 	
@@ -38,8 +43,7 @@ public class SubscriptionController {
 	@Autowired
 	private CryptoService cryptoService;
 
-	@RequestMapping(value="", produces = "application/json")
-	@PostMapping
+	@PostMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<User> createUser(@RequestBody User user) {
 		try {
 			List<User> existing = service.findByEmail(user.getEmail(), new Config("email", "ASC", 0, 1));
@@ -48,15 +52,22 @@ public class SubscriptionController {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			
 			user.setStatus(User.Status.PENDING);
+			
+			if (user.getEmail() == null || user.getFullName() == null || user.getPassword() == null)
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			
+			String passwordCry = cryptoService.encode(user.getPassword(), security_key);
+			
+			user.setPassword(passwordCry);
 			User newUser = service.create(user);
 			 
 			Map<String, Object> root = new HashMap<>();
 			root.put("user", newUser);
-			String security = cryptoService.encode(user.getId(), "password-2018-!@ewa--#&@");
-			root.put("security", security);
+			String security = cryptoService.encode(user.getId(), security_key);
+			root.put("security", URLEncoder.encode(security, "UTF-8").replace("+", "%20"));
 			String body = templateService.applyTemplate("new_user", root);
-			System.out.println(body);
-			mailService.SendMail(user.getEmail(), "Please confirm the subscription", body);
+			
+			//mailService.SendMail(user.getEmail(), "EWA - Please confirm the subscription", body);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(newUser);
 		}
@@ -66,24 +77,25 @@ public class SubscriptionController {
 		}
     }
 	
-	/*
-	@RequestMapping(value="/{userId}/status", produces = "text/html")
-	@GetMapping
+	@GetMapping(value="/{userId}/confirmation", produces = "text/html")
     public String enableUser(@PathVariable("userId") String userId, 
     		@RequestParam String security) {
-		User user = service.read(userId);
-		// String calculated = cryptoService.encode(user.getId(), user.getPassword());
-		
-		String calculated = "";
-		
-		if (user == null || user.getStatus() != User.Status.PENDING || !calculated.equals(security))
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		
-		user.setStatus(User.Status.ENABLED);
-		service.update(user);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(user);
+		try {
+			User user = service.read(userId);
+			String calculated = cryptoService.encode(user.getId(), security_key);
+			
+			if (user == null || user.getStatus() != User.Status.PENDING || !calculated.equals(security))
+				return "Error confirming the user email, please contact EWA Support Team.";
+			
+			user.setStatus(User.Status.ENABLED);
+			service.update(user);
+			
+			return "User confirmation processed!";
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return "Error confirming the user email, please contact EWA Support Team.";
+		}
     }	
-    */
 }
 

@@ -1,6 +1,7 @@
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/ContactRequest.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/search/Config.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/UserService.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/SessionService.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/MailService.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/Session.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/controller/SubscriptionController.java
@@ -11,8 +12,11 @@
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/dao/UserRepository.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/impl/MailServiceImpl.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/TemplateService.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/impl/SessionServiceImpl.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/CircleOfTrust.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/controller/SessionController.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/impl/TemplateServiceImpl.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/impl/UserServiceImpl.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/User.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/Location.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/dao/SessionRepository.java
