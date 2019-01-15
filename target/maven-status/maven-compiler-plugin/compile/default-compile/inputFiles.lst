@@ -1,6 +1,8 @@
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/ContactRequest.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/search/Config.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/UserService.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/Contact.java
+/home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/controller/ContactController.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/SessionService.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/service/MailService.java
 /home/fbertos/workspace/ewa-rest-services/src/main/java/com/ewa/model/Session.java

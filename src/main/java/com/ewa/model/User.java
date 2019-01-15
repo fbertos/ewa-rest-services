@@ -70,4 +70,8 @@ public class User {
 	public enum Status {
 		PENDING, ENABLED, DISABLED;
 	}
+	
+	public Contact toContact() {
+		return new Contact(this.id, this.fullName, this.picture, this.email);
+	}
 }

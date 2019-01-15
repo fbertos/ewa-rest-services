@@ -2,6 +2,7 @@ package com.ewa.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ewa.dao.UserRepository;
+import com.ewa.model.Contact;
 import com.ewa.model.User;
 import com.ewa.search.Config;
 import com.ewa.service.UserService;
@@ -43,5 +45,11 @@ public class UserServiceImpl implements UserService {
 	public List<User> findByEmail(String email, Config filter) {
 		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
 	    return repository.findByEmail(email, request).getContent();
+	}
+
+	public List<Contact> find(String text, Config filter) {
+		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
+	    List<User> users = repository.find(text, request).getContent();
+	    return users.stream().map(user -> user.toContact()).collect(Collectors.toList());
 	}
 }

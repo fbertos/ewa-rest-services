@@ -27,5 +27,8 @@ public class CryptoServiceImpl implements CryptoService {
         String decrypted = new String(cipher.doFinal(text.getBytes()));
         return decrypted;
 	}
-	
+
+	public String encodeBase64(byte[] text) throws Exception {
+		return Base64.encode(text);
+	}
 }

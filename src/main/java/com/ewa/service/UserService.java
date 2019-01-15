@@ -2,6 +2,7 @@ package com.ewa.service;
 
 import java.util.List;
 
+import com.ewa.model.Contact;
 import com.ewa.model.User;
 import com.ewa.search.Config;
 
@@ -13,4 +14,5 @@ public interface UserService {
 	
 	public List<User> findByFullName(String fullName, Config filter);
 	public List<User> findByEmail(String email, Config filter);
+	public List<Contact> find(String text, Config filter);
 }

@@ -79,20 +79,20 @@ public class SessionController {
 			
 			if (user == null || user.isEmpty())
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+			String passwordCry = cryptoService.encode(password, security_key);
 			
-			String passwordCry = cryptoService.encode(user.get(0).getPassword(), security_key);
-			
-			if (!password.equals(passwordCry) || user.get(0).getStatus() != User.Status.ENABLED)
+			if (!user.get(0).getPassword().equals(passwordCry) || user.get(0).getStatus() != User.Status.ENABLED)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			
 			List<Session> existing = service.findByUserId(user.get(0).getId(), new Config("email", "ASC", 0, 1));
-			
 			Session session = new Session();
-			
+
 			if (existing != null && !existing.isEmpty())
 				session = existing.get(0);
-			
+
 			session.setDateTime(new Date());
+			session.setUserId(user.get(0).getId());
 			
 			if (session.getId() != null)
 				service.update(session);

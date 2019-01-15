@@ -14,4 +14,8 @@ public interface UserRepository extends MongoRepository<User, String> {
 	
 	@Query("{ 'fullName' : ?0 }")
 	Page<User> findByFullName(String fullName, Pageable pageable);
+	
+	@Query("{ '$or':[ { 'fullName' : { $regex : ?0 } }, "
+			+ "{ 'email' : { $regex : ?0 } } ] }")
+	Page<User> find(String text, Pageable pageable);
 }

@@ -1,9 +1,12 @@
 package com.ewa.controller;
 
+import java.io.File;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.activation.MimetypesFileTypeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,8 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ewa.model.User;
 import com.ewa.search.Config;
@@ -44,10 +49,11 @@ public class SubscriptionController {
 	private CryptoService cryptoService;
 
 	@PostMapping(value="", produces = "application/json")
-    public @ResponseBody ResponseEntity<User> createUser(@RequestBody User user) {
+    public @ResponseBody ResponseEntity<User> createUser(@RequestPart User user,
+    		@RequestPart(value = "file", required = false) MultipartFile picture) {
 		try {
 			List<User> existing = service.findByEmail(user.getEmail(), new Config("email", "ASC", 0, 1));
-			
+
 			if (existing != null && !existing.isEmpty())
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			
@@ -59,6 +65,12 @@ public class SubscriptionController {
 			String passwordCry = cryptoService.encode(user.getPassword(), security_key);
 			
 			user.setPassword(passwordCry);
+			
+			if (!"image/png".equals(picture.getContentType()))
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+			user.setPicture(cryptoService.encodeBase64(picture.getBytes()));
+
 			User newUser = service.create(user);
 			 
 			Map<String, Object> root = new HashMap<>();
