@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ewa.dao.ContactRepository;
 import com.ewa.model.ContactRequest;
+import com.ewa.search.Config;
 import com.ewa.service.ContactService;
 
 @Service
@@ -34,8 +35,8 @@ public class ContactServiceImpl implements ContactService {
 		repository.delete(contactRequest);
 	}
 
-	public List<ContactRequest> findBy(String userId, String contactId) {
-		PageRequest request = PageRequest.of(0, 1, Sort.Direction.ASC);
+	public List<ContactRequest> find(String userId, String contactId, Config filter) {
+		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
 	    return repository.find(userId, contactId, request).getContent();
 	}
 }

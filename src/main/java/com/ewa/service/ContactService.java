@@ -3,6 +3,7 @@ package com.ewa.service;
 import java.util.List;
 
 import com.ewa.model.ContactRequest;
+import com.ewa.search.Config;
 
 public interface ContactService {
 	public ContactRequest create(ContactRequest contactRequest);
@@ -10,5 +11,5 @@ public interface ContactService {
 	public ContactRequest read(String id);
 	public void delete(ContactRequest contactRequest);
 	
-	public List<ContactRequest> findBy(String userId, String contactId);
+	public List<ContactRequest> find(String userId, String contactId, Config filter);
 }
