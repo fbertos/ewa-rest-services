@@ -1,5 +1,6 @@
 package com.ewa.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ewa.model.CircleOfTrust;
 import com.ewa.model.Contact;
+import com.ewa.model.Location;
 import com.ewa.model.Session;
 import com.ewa.model.User;
 import com.ewa.search.Config;
 import com.ewa.service.CircleOfTrustService;
 import com.ewa.service.CryptoService;
+import com.ewa.service.LocationService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
@@ -46,6 +50,9 @@ public class UserController {
 
 	@Autowired
 	private CircleOfTrustService trustService;
+
+	@Autowired
+	private LocationService locationService;
 	
 	@PutMapping(value="/{userId}", produces = "application/json")
     public @ResponseBody ResponseEntity<User> updateUser(
@@ -148,7 +155,7 @@ public class UserController {
     }	
 
 	@GetMapping(value="/contact", produces = "application/json")
-    public @ResponseBody ResponseEntity<List<Contact>> findContacts(
+    public @ResponseBody ResponseEntity<List<Contact>> listContacts(
     		@RequestHeader("Authorization") String sessionId,
     		@RequestParam String order,
     		@RequestParam String direction,
@@ -175,6 +182,83 @@ public class UserController {
 		}
     }
 
+	@DeleteMapping(value="/contact/{contactId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Contact> deleteContact(
+    		@RequestHeader("Authorization") String sessionId,
+    		@PathVariable("contactId") String contactId) {
+		try {
+			Session session = sessionService.read(sessionId);
+			
+			if (session != null) {
+				List<CircleOfTrust> circles = trustService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
+				
+				if (circles != null && !circles.isEmpty())
+					trustService.delete(circles.get(0));
+				
+			    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+    }
+	
+	@GetMapping(value="/contact/{contactId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<Location>> locateContact(
+    		@RequestHeader("Authorization") String sessionId,
+    		@PathVariable("contactId") String contactId,
+    		@RequestParam Date date,
+			@RequestParam String order,
+			@RequestParam String direction,
+			@RequestParam int page,
+			@RequestParam int itemsperpage) {
+		try {
+			Session session = sessionService.read(sessionId);
+			
+			if (session != null) {
+				List<CircleOfTrust> circles = trustService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
+				
+				if (circles != null && !circles.isEmpty())
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(locationService.find(contactId, new Date(), new Config(order, direction, page, itemsperpage)));
+				
+			    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+    }
+
+	@PostMapping(value="/contact/address", produces = "application/json")
+    public @ResponseBody ResponseEntity<Location> addLocation(
+    		@RequestHeader("Authorization") String sessionId,
+    		@RequestPart Location location) {
+		try {
+			Session session = sessionService.read(sessionId);
+			
+			if (session != null) {
+				location.setUserId(session.getUserId());
+				location.setEventId(null);
+				location.setId(null);
+				
+				locationService.create(location);
+				
+			    return ResponseEntity.status(HttpStatus.OK).body(location);
+			}
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+    }
 	
 }
 

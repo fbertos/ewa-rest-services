@@ -58,7 +58,7 @@ public class ContactRequestController {
     }
 	
 	@PostMapping(value="/{userId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<ContactRequest> addContact(
+    public @ResponseBody ResponseEntity<ContactRequest> requestContact(
     		@RequestHeader("Authorization") String sessionId,
     		@RequestParam String contactId) {
 		try {
@@ -93,7 +93,7 @@ public class ContactRequestController {
     }
 	
 	@DeleteMapping(value="/{userId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<ContactRequest> deleteContact(
+    public @ResponseBody ResponseEntity<ContactRequest> rejectContact(
     		@RequestHeader("Authorization") String sessionId,
     		@RequestParam String contactId) {
 		try {
