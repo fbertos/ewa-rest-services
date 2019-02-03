@@ -5,7 +5,7 @@ import java.util.List;
 import com.ewa.model.ContactRequest;
 import com.ewa.search.Config;
 
-public interface ContactService {
+public interface ContactRequestService {
 	public ContactRequest create(ContactRequest contactRequest);
 	public void update(ContactRequest contactRequest);
 	public ContactRequest read(String id);

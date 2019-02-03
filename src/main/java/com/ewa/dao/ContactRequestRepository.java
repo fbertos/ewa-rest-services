@@ -7,14 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import com.ewa.model.ContactRequest;
 
-public interface ContactRepository extends MongoRepository<ContactRequest, String> {
-
-	@Query("{ 'email' : ?0 }")
-	Page<ContactRequest> findByEmail(String email, Pageable pageable);
-	
-	@Query("{ 'fullName' : ?0 }")
-	Page<ContactRequest> findByFullName(String fullName, Pageable pageable);
-	
+public interface ContactRequestRepository extends MongoRepository<ContactRequest, String> {
 	@Query("{ '$and':[ { 'userId' : ?0 }, "
 			+ "{ 'contactId' : ?1 } ] }")
 	Page<ContactRequest> find(String userId, String contactId, Pageable pageable);

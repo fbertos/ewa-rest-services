@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ewa.model.Contact;
-import com.ewa.model.ContactRequest;
+import com.ewa.model.EventRequest;
 import com.ewa.model.Session;
 import com.ewa.model.User;
 import com.ewa.search.Config;
-import com.ewa.service.ContactRequestService;
+import com.ewa.service.EventRequestService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
@@ -30,8 +30,8 @@ import com.ewa.service.UserService;
  *
  */
 @RestController
-@RequestMapping("/ewa/contact/request")
-public class ContactRequestController {
+@RequestMapping("/ewa/event/request")
+public class EventRequestController {
 	@Autowired
 	private SessionService service;
 	
@@ -39,7 +39,7 @@ public class ContactRequestController {
 	private UserService userService;
 	
 	@Autowired
-	private ContactRequestService contactService;
+	private EventRequestService eventService;
 
 	/**
 	 * Search for contacts
@@ -71,10 +71,11 @@ public class ContactRequestController {
 		}
     }
 	
-	@PostMapping(value="/{userId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<ContactRequest> requestContact(
+	@PostMapping(value="/{userId}/{eventId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<EventRequest> requestEvent(
     		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String contactId) {
+    		@RequestParam String contactId,
+    		@RequestParam String eventId) {
 		try {
 			Session session = service.read(sessionId);
 			
@@ -87,16 +88,16 @@ public class ContactRequestController {
 			if (user == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-			List<ContactRequest> list = contactService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
+			List<EventRequest> list = eventService.find(session.getUserId(), contactId, eventId, new Config("userId", "ASC", 0, 1));
 			
 			if (list != null && !list.isEmpty())
 				return ResponseEntity.status(HttpStatus.OK).body(list.get(0));
 			
-			ContactRequest request = new ContactRequest();
+			EventRequest request = new EventRequest();
 			request.setContactId(contactId);
 			request.setUserId(session.getUserId());
 			
-			contactService.create(request);
+			eventService.create(request);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(request);
 		}
@@ -106,10 +107,11 @@ public class ContactRequestController {
 		}
     }
 	
-	@DeleteMapping(value="/{userId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<ContactRequest> rejectContact(
+	@DeleteMapping(value="/{userId}/{eventId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<EventRequest> rejectEvent(
     		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String contactId) {
+    		@RequestParam String contactId,
+    		@RequestParam String eventId) {
 		try {
 			Session session = service.read(sessionId);
 			
@@ -122,11 +124,11 @@ public class ContactRequestController {
 			if (user == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-			List<ContactRequest> list = contactService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
+			List<EventRequest> list = eventService.find(session.getUserId(), contactId, eventId, new Config("userId", "ASC", 0, 1));
 			
 			if (list != null && !list.isEmpty()) {
-				ContactRequest request = list.get(0);
-				contactService.delete(request);
+				EventRequest request = list.get(0);
+				eventService.delete(request);
 			}
 			
 			return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -136,6 +138,5 @@ public class ContactRequestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
     }
-	
 }
 

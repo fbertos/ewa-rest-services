@@ -8,15 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ewa.dao.ContactRepository;
+import com.ewa.dao.ContactRequestRepository;
 import com.ewa.model.ContactRequest;
 import com.ewa.search.Config;
-import com.ewa.service.ContactService;
+import com.ewa.service.ContactRequestService;
 
 @Service
-public class ContactServiceImpl implements ContactService {
+public class ContactRequestServiceImpl implements ContactRequestService {
 	@Autowired
-	private ContactRepository repository;
+	private ContactRequestRepository repository;
 
 	public ContactRequest create(ContactRequest contactRequest) {
 		return repository.save(contactRequest);
