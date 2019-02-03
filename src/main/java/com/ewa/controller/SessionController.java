@@ -47,6 +47,9 @@ public class SessionController {
 			if (session == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			
+			if (!service.check(session))
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
+			
 			session.setDateTime(new Date());
 			
 			service.update(session);
@@ -114,8 +117,6 @@ public class SessionController {
 			
 			if (session == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-			
-			session.setDateTime(new Date());
 			
 			service.delete(session);
 			

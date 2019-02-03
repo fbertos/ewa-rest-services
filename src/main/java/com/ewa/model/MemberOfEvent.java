@@ -8,8 +8,6 @@ public class MemberOfEvent {
 
 	private String userId;
 	
-	private String contactId;
-	
 	private String eventId;
 
 	public String getId() {
@@ -26,14 +24,6 @@ public class MemberOfEvent {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public String getContactId() {
-		return contactId;
-	}
-
-	public void setContactId(String contactId) {
-		this.contactId = contactId;
 	}
 
 	public String getEventId() {

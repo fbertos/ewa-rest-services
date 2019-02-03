@@ -11,5 +11,6 @@ public interface SessionService {
 	public Session read(String id);
 	public void delete(Session Session);
 	
+	public boolean check(Session session);
 	public List<Session> findByUserId(String userId, Config filter);
 }

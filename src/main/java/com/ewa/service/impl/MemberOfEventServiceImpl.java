@@ -35,18 +35,17 @@ public class MemberOfEventServiceImpl implements MemberOfEventService {
 		repository.delete(memberOfEvent);
 	}
 
-	public List<MemberOfEvent> find(String userId, String contactId, String eventId, Config filter) {
+	public List<MemberOfEvent> findByUserId(String userId, Config filter) {
 		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
-	    return repository.find(userId, contactId, eventId, request).getContent();
+	    return repository.findByUserId(userId, request).getContent();
 	}
 
-	public List<MemberOfEvent> findByUserId(String userId, String eventId, Config filter) {
-		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
-	    return repository.findByUserId(userId, eventId, request).getContent();
+	public List<MemberOfEvent> findByUserId(String userId) {
+	    return repository.findByUserId(userId).getContent();
 	}
-
-	public List<MemberOfEvent> findByContactId(String contactId, String eventId, Config filter) {
+	
+	public List<MemberOfEvent> find(String userId, String eventId, Config filter) {
 		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
-	    return repository.findByContactId(contactId, eventId, request).getContent();
+	    return repository.find(userId, eventId, request).getContent();
 	}
 }

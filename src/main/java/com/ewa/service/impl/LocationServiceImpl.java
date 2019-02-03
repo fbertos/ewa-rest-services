@@ -41,4 +41,10 @@ public class LocationServiceImpl implements LocationService {
 	    List<Location> locations = repository.find(userId, date, request).getContent();
 	    return locations;
 	}
+	
+	public Location findLatest(String userId) {
+		PageRequest request = PageRequest.of(0, 1, new Sort(Sort.Direction.DESC, "date"));
+	    List<Location> locations = repository.findLatest(userId, request).getContent();
+	    return locations.isEmpty()?null:locations.get(0);
+	}	
 }

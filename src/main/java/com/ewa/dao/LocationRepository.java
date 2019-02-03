@@ -19,6 +19,8 @@ public interface LocationRepository extends MongoRepository<Location, String> {
 	
 	@Query("{ '$and':[ { 'userId' : ?0 }, "
 			+ "{ 'date' : { $gte : ?1 } } ] }")
-	
 	Page<Location> find(String userId, Date date, Pageable pageable);
+
+	@Query("{ '$and':[ { 'userId' : ?0 } } ]")
+	Page<Location> findLatest(String userId, Pageable pageable);
 }

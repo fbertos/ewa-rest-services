@@ -11,7 +11,7 @@ public interface MemberOfEventService {
 	public MemberOfEvent read(String id);
 	public void delete(MemberOfEvent memberOfEvent);
 	
-	public List<MemberOfEvent> findByUserId(String userId, String eventId, Config filter);
-	public List<MemberOfEvent> findByContactId(String contactId, String eventId, Config filter);
-	public List<MemberOfEvent> find(String userId, String contactId, String eventId, Config filter);
+	public List<MemberOfEvent> findByUserId(String userId, Config filter);
+	public List<MemberOfEvent> findByUserId(String userId);
+	public List<MemberOfEvent> find(String userId, String eventId, Config filter);
 }

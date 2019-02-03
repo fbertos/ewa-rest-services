@@ -59,6 +59,9 @@ public class ContactRequestController {
 			Session session = service.read(sessionId);
 			
 			if (session != null) {
+				if (!service.check(session))
+					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
+					
 				return ResponseEntity.status(HttpStatus.OK).body(
 						userService.find(q, new Config(order, direction, 0, 1)));
 			}
@@ -81,7 +84,10 @@ public class ContactRequestController {
 			if (session == null) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
-			
+
+			if (!service.check(session))
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
+
 			User user = userService.read(contactId);
 
 			if (user == null)
@@ -116,6 +122,9 @@ public class ContactRequestController {
 			if (session == null) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
+
+			if (!service.check(session))
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 			
 			User user = userService.read(contactId);
 
@@ -136,6 +145,5 @@ public class ContactRequestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
     }
-	
 }
 

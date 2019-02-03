@@ -10,5 +10,7 @@ import com.ewa.model.Event;
 public interface EventRepository extends MongoRepository<Event, String> {
 	@Query("{ 'ownerId' : ?0 }")
 	Page<Event> find(String ownerId, Pageable pageable);
-	
+
+	@Query("{ 'ownerId' : ?0 }")
+	Page<Event> find(String ownerId);	
 }

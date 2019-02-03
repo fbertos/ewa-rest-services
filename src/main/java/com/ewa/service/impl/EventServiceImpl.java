@@ -39,5 +39,8 @@ public class EventServiceImpl implements EventService {
 		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
 	    return repository.find(ownerId, request).getContent();
 	}
-	
+
+	public List<Event> find(String ownerId) {
+	    return repository.find(ownerId).getContent();
+	}
 }

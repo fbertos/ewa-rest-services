@@ -23,12 +23,6 @@ import com.ewa.service.EventRequestService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
-
-/**
- * REST Controller managing contact requests
- * @author fbertos
- *
- */
 @RestController
 @RequestMapping("/ewa/event/request")
 public class EventRequestController {
@@ -41,14 +35,6 @@ public class EventRequestController {
 	@Autowired
 	private EventRequestService eventService;
 
-	/**
-	 * Search for contacts
-	 * @param sessionId The session token ID
-	 * @param q Query to find contacts
-	 * @param order Column name for order
-	 * @param direction ASC or DESC
-	 * @return The list of contacts
-	 */
 	@GetMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<List<Contact>> findContacts(
     		@RequestHeader("Authorization") String sessionId,
@@ -59,6 +45,9 @@ public class EventRequestController {
 			Session session = service.read(sessionId);
 			
 			if (session != null) {
+				if (!service.check(session))
+					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
+				
 				return ResponseEntity.status(HttpStatus.OK).body(
 						userService.find(q, new Config(order, direction, 0, 1)));
 			}
@@ -82,6 +71,9 @@ public class EventRequestController {
 			if (session == null) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
+
+			if (!service.check(session))
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 			
 			User user = userService.read(contactId);
 
@@ -118,6 +110,9 @@ public class EventRequestController {
 			if (session == null) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
+
+			if (!service.check(session))
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 			
 			User user = userService.read(contactId);
 

@@ -75,7 +75,7 @@ public class SubscriptionController {
 			root.put("security", URLEncoder.encode(security, "UTF-8").replace("+", "%20"));
 			String body = templateService.applyTemplate("new_user", root);
 			
-			//mailService.SendMail(user.getEmail(), "EWA - Please confirm the subscription", body);
+			mailService.SendMail(user.getEmail(), "Please confirm the subscription", body);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(newUser);
 		}

@@ -13,6 +13,8 @@ public class User {
 	private String email;
 	
 	private String password;
+	
+	private String preferredContactId;
 
 	private Status status;
 	
@@ -73,5 +75,13 @@ public class User {
 	
 	public Contact toContact() {
 		return new Contact(this.id, this.fullName, this.picture, this.email);
+	}
+
+	public String getPreferredContactId() {
+		return preferredContactId;
+	}
+
+	public void setPreferredContactId(String preferredContactId) {
+		this.preferredContactId = preferredContactId;
 	}
 }

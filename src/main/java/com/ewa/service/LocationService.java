@@ -13,4 +13,5 @@ public interface LocationService {
 	public void delete(Location location);
 	
 	public List<Location> find(String userId, Date date, Config filter);
+	public Location findLatest(String userId);
 }

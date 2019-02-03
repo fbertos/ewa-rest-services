@@ -1,5 +1,7 @@
 package com.ewa.service.impl;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,5 +40,18 @@ public class SessionServiceImpl implements SessionService {
 	public List<Session> findByUserId(String userId, Config filter) {
 		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
 	    return repository.findByUserId(userId, request).getContent();
+	}
+
+	public boolean check(Session session) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(session.getDateTime());
+		cal.add(Calendar.MINUTE, 90);
+		Date limit = cal.getTime();
+		Date now = new Date();
+		
+		if (now.compareTo(limit) >= 0)
+			return false;
+		
+		return true;
 	}
 }

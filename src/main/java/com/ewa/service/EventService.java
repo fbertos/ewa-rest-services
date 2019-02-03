@@ -12,4 +12,5 @@ public interface EventService {
 	public void delete(Event event);
 	
 	public List<Event> find(String ownerId, Config filter);
+	public List<Event> find(String ownerId);
 }
