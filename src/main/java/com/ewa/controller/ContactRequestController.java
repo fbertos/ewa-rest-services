@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +24,6 @@ import com.ewa.service.ContactRequestService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
-
-/**
- * REST Controller managing contact requests
- * @author fbertos
- *
- */
 @RestController
 @RequestMapping("/ewa/contact/request")
 public class ContactRequestController {
@@ -41,14 +36,6 @@ public class ContactRequestController {
 	@Autowired
 	private ContactRequestService contactService;
 
-	/**
-	 * Search for contacts
-	 * @param sessionId The session token ID
-	 * @param q Query to find contacts
-	 * @param order Column name for order
-	 * @param direction ASC or DESC
-	 * @return The list of contacts
-	 */
 	@GetMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<List<Contact>> findContacts(
     		@RequestHeader("Authorization") String sessionId,
@@ -74,10 +61,10 @@ public class ContactRequestController {
 		}
     }
 	
-	@PostMapping(value="/{userId}", produces = "application/json")
+	@PostMapping(value="/{contactId}", produces = "application/json")
     public @ResponseBody ResponseEntity<ContactRequest> requestContact(
     		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String contactId) {
+    		@PathVariable("contactId") String contactId) {
 		try {
 			Session session = service.read(sessionId);
 			
@@ -112,10 +99,10 @@ public class ContactRequestController {
 		}
     }
 	
-	@DeleteMapping(value="/{userId}", produces = "application/json")
+	@DeleteMapping(value="/{contactId}", produces = "application/json")
     public @ResponseBody ResponseEntity<ContactRequest> rejectContact(
     		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String contactId) {
+    		@PathVariable("contactId") String contactId) {
 		try {
 			Session session = service.read(sessionId);
 			

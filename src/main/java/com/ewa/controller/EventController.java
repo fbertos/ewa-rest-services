@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,6 +102,77 @@ public class EventController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
+    }
+	
+	@PostMapping(value="/{eventId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Event> updateEvent(
+    		@RequestHeader("Authorization") String sessionId,
+    		@PathVariable("eventId") String eventId,
+    		@RequestPart Event event,
+    		@RequestPart(value = "file", required = false) MultipartFile picture) {
+		try {
+			Session session = sessionService.read(sessionId);
+			
+			if (session == null) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+			
+			if (!sessionService.check(session))
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
+			
+			Event currentEvent = service.read(eventId);
+			
+			if (currentEvent.getOwnerId() != session.getUserId())
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+			
+			if (picture != null && !"image/png".equals(picture.getContentType()))
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			
+			currentEvent.setAddress(event.getAddress());
+			currentEvent.setDate(event.getDate());
+			currentEvent.setDescription(event.getDescription());
+			currentEvent.setName(event.getName());
+
+			if (picture != null)
+				currentEvent.setPicture(cryptoService.encodeBase64(picture.getBytes()));
+
+			service.update(currentEvent);
+			
+			return ResponseEntity.status(HttpStatus.OK).body(currentEvent);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
     }	
+
+	@DeleteMapping(value="/{eventId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<Event> deleteEvent(
+    		@RequestHeader("Authorization") String sessionId,
+    		@PathVariable("eventId") String eventId) {
+		try {
+			Session session = sessionService.read(sessionId);
+			
+			if (session == null) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+			
+			if (!sessionService.check(session))
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
+			
+			Event event = service.read(eventId);
+			
+			if (event.getOwnerId() != session.getUserId())
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+			
+			service.delete(event);
+			
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+    }		
 }
 

@@ -5,6 +5,7 @@ public class Contact {
 	private String fullName;
 	private String picture;
 	private String email;
+	private Location knownLocation;
 	
 	public Contact(String id, String fullName, String picture, String email) {
 		this.id = id;
@@ -42,5 +43,13 @@ public class Contact {
 	
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Location getKnownLocation() {
+		return knownLocation;
+	}
+
+	public void setKnownLocation(Location knownLocation) {
+		this.knownLocation = knownLocation;
 	}
 }

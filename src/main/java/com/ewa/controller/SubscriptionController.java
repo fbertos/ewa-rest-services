@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ewa.model.User;
 import com.ewa.search.Config;
 import com.ewa.service.CryptoService;
+import com.ewa.service.LanguageService;
 import com.ewa.service.MailService;
 import com.ewa.service.TemplateService;
 import com.ewa.service.UserService;
@@ -44,6 +45,9 @@ public class SubscriptionController {
 	@Autowired
 	private CryptoService cryptoService;
 
+	@Autowired
+	private LanguageService languageService;
+	
 	@PostMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<User> createUser(@RequestPart User user,
     		@RequestPart(value = "file", required = false) MultipartFile picture) {
@@ -75,7 +79,9 @@ public class SubscriptionController {
 			root.put("security", URLEncoder.encode(security, "UTF-8").replace("+", "%20"));
 			String body = templateService.applyTemplate("new_user", root);
 			
-			mailService.SendMail(user.getEmail(), "Please confirm the subscription", body);
+			String subject = languageService.getLabel("subscription_subject", user.getLanguage());
+			
+			mailService.SendMail(user.getEmail(), subject, body);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(newUser);
 		}
@@ -93,16 +99,16 @@ public class SubscriptionController {
 			String calculated = cryptoService.encode(user.getId(), security_key);
 			
 			if (user == null || user.getStatus() != User.Status.PENDING || !calculated.equals(security))
-				return "Error confirming the user email, please contact EWA Support Team.";
+				return languageService.getLabel("error_confirmation", user.getLanguage());
 			
 			user.setStatus(User.Status.ENABLED);
 			service.update(user);
 			
-			return "User confirmation processed!";
+			return languageService.getLabel("ok_confirmation", user.getLanguage());
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			return "Error confirming the user email, please contact EWA Support Team.";
+			return languageService.getLabel("error_confirmation", "en_EN");
 		}
     }	
 }

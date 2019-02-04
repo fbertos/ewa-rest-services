@@ -15,6 +15,8 @@ public class User {
 	private String password;
 	
 	private String preferredContactId;
+	
+	private String language;
 
 	private Status status;
 	
@@ -83,5 +85,13 @@ public class User {
 
 	public void setPreferredContactId(String preferredContactId) {
 		this.preferredContactId = preferredContactId;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 }

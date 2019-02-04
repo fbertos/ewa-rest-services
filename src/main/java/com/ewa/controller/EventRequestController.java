@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,11 +61,11 @@ public class EventRequestController {
 		}
     }
 	
-	@PostMapping(value="/{userId}/{eventId}", produces = "application/json")
+	@PostMapping(value="/{contactId}/{eventId}", produces = "application/json")
     public @ResponseBody ResponseEntity<EventRequest> requestEvent(
     		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String contactId,
-    		@RequestParam String eventId) {
+    		@PathVariable("contactId") String contactId,
+    		@PathVariable("eventId") String eventId) {
 		try {
 			Session session = service.read(sessionId);
 			
@@ -99,11 +100,11 @@ public class EventRequestController {
 		}
     }
 	
-	@DeleteMapping(value="/{userId}/{eventId}", produces = "application/json")
+	@DeleteMapping(value="/{contactId}/{eventId}", produces = "application/json")
     public @ResponseBody ResponseEntity<EventRequest> rejectEvent(
     		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String contactId,
-    		@RequestParam String eventId) {
+    		@PathVariable("contactId") String contactId,
+    		@PathVariable("eventId") String eventId) {
 		try {
 			Session session = service.read(sessionId);
 			

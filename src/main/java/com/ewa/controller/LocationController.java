@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,7 +54,7 @@ public class LocationController {
 				List<CircleOfTrust> circles = trustService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
 				
 				if (circles != null && !circles.isEmpty())
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(locationService.find(contactId, new Date(), new Config(order, direction, page, itemsperpage)));
+					return ResponseEntity.status(HttpStatus.OK).body(locationService.find(contactId, new Date(), new Config(order, direction, page, itemsperpage)));
 				
 			    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
@@ -71,7 +70,7 @@ public class LocationController {
 	@PostMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<Location> addLocation(
     		@RequestHeader("Authorization") String sessionId,
-    		@RequestPart Location location) {
+    		@RequestParam Location location) {
 		try {
 			Session session = sessionService.read(sessionId);
 			
