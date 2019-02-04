@@ -19,6 +19,12 @@ public class Event {
 	private String ownerId;
 	
 	private Date date;
+	
+	private Status status;
+	
+	public Event() {
+		this.status = Status.ENABLED;
+	}
 
 	public String getId() {
 		return id;
@@ -75,4 +81,17 @@ public class Event {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public enum Status {
+		ENABLED, DISABLED;
+	}
+	
 }

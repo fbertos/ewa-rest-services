@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ewa.model.CircleOfTrust;
 import com.ewa.model.Contact;
+import com.ewa.model.Location;
 import com.ewa.model.Session;
 import com.ewa.model.User;
 import com.ewa.search.Config;
 import com.ewa.service.CircleOfTrustService;
+import com.ewa.service.LocationService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
@@ -32,6 +34,9 @@ public class ContactController {
 	
 	@Autowired
 	private SessionService sessionService;
+	
+	@Autowired
+	private LocationService locationService;
 	
 	@Autowired
 	private CircleOfTrustService trustService;
@@ -51,8 +56,14 @@ public class ContactController {
 					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 				
 				List<CircleOfTrust> circles = trustService.findByUserId(session.getUserId(), new Config(order, direction, page, itemsperpage));
-			    List<Contact> contacts = circles.stream().map(circle -> {
+			    List<Contact> contacts = circles.stream().filter(circle -> {
 			    	User user = service.read(circle.getContactId());
+			    	return user.getStatus() == User.Status.ENABLED;
+			    }).map(circle -> {
+			    	User user = service.read(circle.getContactId());
+			    	Contact contact = user.toContact();
+			    	Location location = locationService.findLatest(user.getId());
+			    	contact.setKnownLocation(location);
 			    	return user.toContact();
 			    }).collect(Collectors.toList());
 			    

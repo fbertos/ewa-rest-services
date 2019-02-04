@@ -118,7 +118,7 @@ public class UserController {
     }
 	
 	@DeleteMapping(value="/{userId}", produces = "text/html")
-    public @ResponseBody ResponseEntity<User> deleteUser(@RequestHeader("Authorization") String sessionId,
+    public @ResponseBody ResponseEntity<User> disableUser(@RequestHeader("Authorization") String sessionId,
     		@PathVariable("userId") String userId) {
 		try {
 			Session session = sessionService.read(sessionId);
@@ -135,7 +135,8 @@ public class UserController {
 			if (currentUser == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			
-			service.delete(currentUser);
+			currentUser.setStatus(User.Status.DISABLED);
+			service.update(currentUser);
 			sessionService.delete(session);
 
 			return ResponseEntity.status(HttpStatus.OK).body(null);

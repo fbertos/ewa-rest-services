@@ -92,7 +92,7 @@ public class EventController {
 			for (final MemberOfEvent member : members) {
 				Event event = eventService.read(member.getEventId());
 				
-				if (!events.contains(event))
+				if (!events.contains(event) && event.getStatus() == Event.Status.ENABLED)
 					events.add(event);
 			}
 			
@@ -165,7 +165,8 @@ public class EventController {
 			if (event.getOwnerId() != session.getUserId())
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			
-			service.delete(event);
+			event.setStatus(Event.Status.DISABLED);
+			service.update(event);
 			
 			return ResponseEntity.status(HttpStatus.OK).body(null);
 		}
