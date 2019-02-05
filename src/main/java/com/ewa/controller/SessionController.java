@@ -24,6 +24,11 @@ import com.ewa.service.CryptoService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
+/**
+ * Rest controller managing the authentication and sessions
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/session")
 public class SessionController {
@@ -39,6 +44,11 @@ public class SessionController {
 	@Autowired
 	private CryptoService cryptoService;
 
+	/**
+	 * Refresh the session of the user
+	 * @param sessionId Session Token Id
+	 * @return The session
+	 */
 	@PostMapping(value="/{sessionId}", produces = "application/json")
     public @ResponseBody ResponseEntity<Session> updateSession(@PathVariable("sessionId") String sessionId) {
 		try {
@@ -62,6 +72,11 @@ public class SessionController {
 		}
     }
 	
+	/**
+	 * Get the active session
+	 * @param sessionId Session Token Id
+	 * @return The session
+	 */
 	@GetMapping(value="/{sessionId}", produces = "application/json")
     public @ResponseBody ResponseEntity<Session> getSession(@PathVariable("sessionId") String sessionId) {
 		try {
@@ -74,6 +89,12 @@ public class SessionController {
 		}
     }
 	
+	/**
+	 * Get a new valid session token
+	 * @param username Username
+	 * @param password Password
+	 * @return The new session
+	 */
 	@PutMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<Session> createSession(@RequestParam String username, 
     		@RequestParam String password) {
@@ -110,6 +131,11 @@ public class SessionController {
 		}
     }
 	
+	/**
+	 * Close an active session
+	 * @param sessionId Session Token Id
+	 * @return Status 200 if all ok
+	 */
 	@DeleteMapping(value="/{sessionId}", produces = "application/json")
     public @ResponseBody ResponseEntity<Session> deleteSession(@PathVariable("sessionId") String sessionId) {
 		try {

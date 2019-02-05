@@ -6,24 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ewa.model.Contact;
 import com.ewa.model.EventRequest;
 import com.ewa.model.Session;
 import com.ewa.model.User;
-import com.ewa.search.Config;
 import com.ewa.service.EventRequestService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
+/**
+ * Rest controller managing a request to participate in an event
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/event/request")
 public class EventRequestController {
@@ -36,31 +37,13 @@ public class EventRequestController {
 	@Autowired
 	private EventRequestService eventService;
 
-	@GetMapping(value="", produces = "application/json")
-    public @ResponseBody ResponseEntity<List<Contact>> findContacts(
-    		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String q,
-    		@RequestParam String order,
-    		@RequestParam String direction) {
-		try {
-			Session session = service.read(sessionId);
-			
-			if (session != null) {
-				if (!service.check(session))
-					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
-				
-				return ResponseEntity.status(HttpStatus.OK).body(
-						userService.find(q, new Config(order, direction, 0, 1)));
-			}
-
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-    }
-	
+	/**
+	 * Send a request for an event to a contact
+	 * @param sessionId Session Token Id
+	 * @param contactId Contact ID
+	 * @param eventId Event ID
+	 * @return The new event request
+	 */
 	@PostMapping(value="/{contactId}/{eventId}", produces = "application/json")
     public @ResponseBody ResponseEntity<EventRequest> requestEvent(
     		@RequestHeader("Authorization") String sessionId,
@@ -100,6 +83,13 @@ public class EventRequestController {
 		}
     }
 	
+	/**
+	 * Reject a request for an event coming from a contact
+	 * @param sessionId Session Token Id
+	 * @param contactId Contact ID
+	 * @param eventId Event ID
+	 * @return Status 200 if all ok
+	 */
 	@DeleteMapping(value="/{contactId}/{eventId}", produces = "application/json")
     public @ResponseBody ResponseEntity<EventRequest> rejectEvent(
     		@RequestHeader("Authorization") String sessionId,

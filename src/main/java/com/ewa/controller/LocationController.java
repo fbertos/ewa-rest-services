@@ -23,6 +23,11 @@ import com.ewa.service.CircleOfTrustService;
 import com.ewa.service.LocationService;
 import com.ewa.service.SessionService;
 
+/**
+ * Rest controller managing the location of users
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/location")
 public class LocationController {
@@ -35,6 +40,17 @@ public class LocationController {
 	@Autowired
 	private LocationService locationService;
 	
+	/**
+	 * Get the positions of a contact after a selected date
+	 * @param sessionId Session Token Id
+	 * @param contactId Contact ID
+	 * @param date Selected date
+	 * @param order Field name for ordering
+	 * @param direction ASC or DESC
+	 * @param page Number of page
+	 * @param itemsperpage Amount of items by page
+	 * @return List of locations
+	 */
 	@GetMapping(value="/{contactId}", produces = "application/json")
     public @ResponseBody ResponseEntity<List<Location>> locateContact(
     		@RequestHeader("Authorization") String sessionId,
@@ -67,6 +83,12 @@ public class LocationController {
 		}
     }
 
+	/**
+	 * Set my last position
+	 * @param sessionId Session Token Id
+	 * @param location Location
+	 * @return New location created
+	 */
 	@PostMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<Location> addLocation(
     		@RequestHeader("Authorization") String sessionId,

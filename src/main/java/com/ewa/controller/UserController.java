@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +20,11 @@ import com.ewa.service.CryptoService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
+/**
+ * Rest controller managing users
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/user")
 public class UserController {
@@ -36,10 +40,16 @@ public class UserController {
 	@Autowired
 	private CryptoService cryptoService;
 
-	@PutMapping(value="/{userId}", produces = "application/json")
+	/**
+	 * Update my user information
+	 * @param sessionId Session Token Id
+	 * @param user User object
+	 * @param picture The picture linked to the user (optional)
+	 * @return The new user
+	 */
+	@PutMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<User> updateUser(
     		@RequestHeader("Authorization") String sessionId,
-    		@PathVariable("userId") String userId,
     		@RequestPart User user,
     		@RequestPart(value = "file", required = false) MultipartFile picture) {
 		try {
@@ -52,7 +62,7 @@ public class UserController {
 			if (!sessionService.check(session))
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 			
-			User currentUser = service.read(userId);
+			User currentUser = service.read(session.getUserId());
 
 			if (currentUser == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -78,10 +88,16 @@ public class UserController {
 		}
     }
 	
-	@PutMapping(value="/{userId}/password", produces = "application/json")
+	/**
+	 * Change the password for my user
+	 * @param sessionId Session Token Id
+	 * @param oldPassword Old Password
+	 * @param newPassword New Password
+	 * @return The user updated
+	 */
+	@PutMapping(value="/password", produces = "application/json")
     public @ResponseBody ResponseEntity<User> updatePassword(
     		@RequestHeader("Authorization") String sessionId,
-    		@PathVariable("userId") String userId,
     		@RequestParam String oldPassword,
     		@RequestParam String newPassword) {
 		try {
@@ -94,7 +110,7 @@ public class UserController {
 			if (!sessionService.check(session))
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 			
-			User user = service.read(userId);
+			User user = service.read(session.getUserId());
 
 			if (user == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -117,9 +133,13 @@ public class UserController {
 		}
     }
 	
-	@DeleteMapping(value="/{userId}", produces = "text/html")
-    public @ResponseBody ResponseEntity<User> disableUser(@RequestHeader("Authorization") String sessionId,
-    		@PathVariable("userId") String userId) {
+	/**
+	 * Disable my user
+	 * @param sessionId Session Token Id
+	 * @return Status 200 if all ok
+	 */
+	@DeleteMapping(value="", produces = "text/html")
+    public @ResponseBody ResponseEntity<User> disableUser(@RequestHeader("Authorization") String sessionId) {
 		try {
 			Session session = sessionService.read(sessionId);
 			
@@ -130,7 +150,7 @@ public class UserController {
 			if (!sessionService.check(session))
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 			
-			User currentUser = service.read(userId);
+			User currentUser = service.read(session.getUserId());
 
 			if (currentUser == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

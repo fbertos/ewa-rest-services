@@ -27,6 +27,11 @@ import com.ewa.service.MailService;
 import com.ewa.service.TemplateService;
 import com.ewa.service.UserService;
 
+/**
+ * Rest controller managing the subscription of users into the service
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/subscription")
 public class SubscriptionController {
@@ -48,6 +53,12 @@ public class SubscriptionController {
 	@Autowired
 	private LanguageService languageService;
 	
+	/**
+	 * Create a new user on PENDING status (not confirmed yet)
+	 * @param user The new user
+	 * @param picture The new picture linked to the user (optional)
+	 * @return The new user
+	 */
 	@PostMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<User> createUser(@RequestPart User user,
     		@RequestPart(value = "file", required = false) MultipartFile picture) {
@@ -91,6 +102,12 @@ public class SubscriptionController {
 		}
     }
 	
+	/**
+	 * Confirm an user through a valid email account
+	 * @param userId UserID
+	 * @param security Security Token
+	 * @return Result of the confirmation
+	 */
 	@GetMapping(value="/{userId}/confirmation", produces = "text/html")
     public String enableUser(@PathVariable("userId") String userId, 
     		@RequestParam String security) {

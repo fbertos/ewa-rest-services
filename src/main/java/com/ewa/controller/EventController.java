@@ -1,6 +1,7 @@
 package com.ewa.controller;
 
 import java.util.Calendar;
+
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,11 @@ import com.ewa.service.MemberOfEventService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
+/**
+ * Rest controller managing the events
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/event")
 public class EventController {
@@ -61,6 +67,13 @@ public class EventController {
 	@Autowired
 	private EventService eventService;
 	
+	/**
+	 * Create a new event
+	 * @param sessionId Session Token Id
+	 * @param event Event to create
+	 * @param picture Picture linked to the event (optional)
+	 * @return The new event created
+	 */
 	@PostMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<Event> createEvent(
     		@RequestHeader("Authorization") String sessionId,
@@ -92,6 +105,11 @@ public class EventController {
 		}
     }
 	
+	/**
+	 * List of events where i am involved (owner or member)
+	 * @param sessionId Session Token Id
+	 * @return List of events
+	 */
 	@GetMapping(value="", produces = "application/json")
     public @ResponseBody ResponseEntity<List<Event>> listEvents(
     		@RequestHeader("Authorization") String sessionId) {
@@ -125,6 +143,14 @@ public class EventController {
 		}
     }
 	
+	/**
+	 * Update an event that owns me
+	 * @param sessionId Session Token Id
+	 * @param eventId Event Id
+	 * @param event Event to update
+	 * @param picture Picture linked to the event (optional)
+	 * @return The event updated
+	 */
 	@PostMapping(value="/{eventId}", produces = "application/json")
     public @ResponseBody ResponseEntity<Event> updateEvent(
     		@RequestHeader("Authorization") String sessionId,
@@ -167,6 +193,12 @@ public class EventController {
 		}
     }	
 
+	/**
+	 * Disactivate an event where i am the owner
+	 * @param sessionId Session Token Id
+	 * @param eventId Event ID
+	 * @return Status 200 if all ok
+	 */
 	@DeleteMapping(value="/{eventId}", produces = "application/json")
     public @ResponseBody ResponseEntity<Event> deleteEvent(
     		@RequestHeader("Authorization") String sessionId,
@@ -197,6 +229,12 @@ public class EventController {
 		}
     }
 	
+	/**
+	 * Read the details of an event (members contact including location) if i am involved
+	 * @param sessionId Session Token Id
+	 * @param eventId Event ID
+	 * @return List of contacts
+	 */
 	@GetMapping(value="/{eventId}", produces = "application/json")
     public @ResponseBody ResponseEntity<List<Contact>> getEvent(
     		@RequestHeader("Authorization") String sessionId,

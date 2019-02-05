@@ -7,38 +7,32 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ewa.model.Session;
 import com.ewa.service.LanguageService;
-import com.ewa.service.SessionService;
 
+/**
+ * Rest controller managing the application texts for any supported language
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/language")
 public class LanguageController {
 	@Autowired
-	private SessionService sessionService;
-	
-	@Autowired
 	private LanguageService service;
 
+	/**
+	 * List of supported languages
+	 * @return List of languages
+	 */
 	@GetMapping(value="", produces = "application/json")
-    public @ResponseBody ResponseEntity<HashMap<String, String>> listLanguages(
-    		@RequestHeader("Authorization") String sessionId) {
+    public @ResponseBody ResponseEntity<HashMap<String, String>> listLanguages() {
 		try {
-			Session session = sessionService.read(sessionId);
-			
-			if (session != null) {
-				if (!sessionService.check(session))
-					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 				
-			    return ResponseEntity.status(HttpStatus.OK).body(service.getLanguages());
-			}
-
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		    return ResponseEntity.status(HttpStatus.OK).body(service.getLanguages());
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -46,21 +40,15 @@ public class LanguageController {
 		}
     }
 
+	/**
+	 * Send the list of texts for the selected language
+	 * @param language Supported language
+	 * @return Application texts
+	 */
 	@GetMapping(value="/{language}", produces = "application/json")
-    public @ResponseBody ResponseEntity<HashMap<String, String>> listLabels(
-    		@RequestHeader("Authorization") String sessionId,
-    		@PathVariable("language") String language) {
+    public @ResponseBody ResponseEntity<HashMap<String, String>> listLabels(@PathVariable("language") String language) {
 		try {
-			Session session = sessionService.read(sessionId);
-			
-			if (session != null) {
-				if (!sessionService.check(session))
-					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
-				
-				return ResponseEntity.status(HttpStatus.OK).body(service.getLabels(language));
-			}
-
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			return ResponseEntity.status(HttpStatus.OK).body(service.getLabels(language));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
