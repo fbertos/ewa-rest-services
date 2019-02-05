@@ -43,7 +43,7 @@ public class LanguageServiceImpl implements LanguageService {
 				if (properties == null)
 					properties = new HashMap<String, Properties>();
 				
-				Resource resource = new ClassPathResource("app_" + language + ".properties");
+				Resource resource = new ClassPathResource("languages/app_" + language + ".properties");
 				Properties props = PropertiesLoaderUtils.loadProperties(resource);
 				properties.put(language, props);
 				return props;

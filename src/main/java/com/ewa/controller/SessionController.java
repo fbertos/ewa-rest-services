@@ -88,7 +88,7 @@ public class SessionController {
 			if (!user.get(0).getPassword().equals(passwordCry) || user.get(0).getStatus() != User.Status.ENABLED)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			
-			List<Session> existing = service.findByUserId(user.get(0).getId(), new Config("email", "ASC", 0, 1));
+			List<Session> existing = service.findByUserId(user.get(0).getId());
 			Session session = new Session();
 
 			if (existing != null && !existing.isEmpty())

@@ -26,6 +26,11 @@ import com.ewa.service.LocationService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
+/**
+ * Rest controller managing the contact between users
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/contact")
 public class ContactController {
@@ -41,13 +46,14 @@ public class ContactController {
 	@Autowired
 	private CircleOfTrustService trustService;
 
-	@GetMapping(value="", produces = "application/json")
+	/**
+	 * Get the list of current contacts of one user
+	 * @param sessionId Session Token Id
+	 * @return List of current contacts
+	 */
+	@GetMapping(value="/current", produces = "application/json")
     public @ResponseBody ResponseEntity<List<Contact>> listContacts(
-    		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String order,
-    		@RequestParam String direction,
-    		@RequestParam int page,
-    		@RequestParam int itemsperpage) {
+    		@RequestHeader("Authorization") String sessionId) {
 		try {
 			Session session = sessionService.read(sessionId);
 			
@@ -55,7 +61,7 @@ public class ContactController {
 				if (!sessionService.check(session))
 					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 				
-				List<CircleOfTrust> circles = trustService.findByUserId(session.getUserId(), new Config(order, direction, page, itemsperpage));
+				List<CircleOfTrust> circles = trustService.findByUserId(session.getUserId());
 			    List<Contact> contacts = circles.stream().filter(circle -> {
 			    	User user = service.read(circle.getContactId());
 			    	return user.getStatus() == User.Status.ENABLED;
@@ -78,6 +84,12 @@ public class ContactController {
 		}
     }
 
+	/**
+	 * Delete one of my contacts
+	 * @param sessionId Session Token Id
+	 * @param contactId Contact ID
+	 * @return Status 200 if all correct
+	 */
 	@DeleteMapping(value="/{contactId}", produces = "application/json")
     public @ResponseBody ResponseEntity<Contact> deleteContact(
     		@RequestHeader("Authorization") String sessionId,
@@ -89,12 +101,45 @@ public class ContactController {
 				if (!sessionService.check(session))
 					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 				
-				List<CircleOfTrust> circles = trustService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
+				List<CircleOfTrust> circles = trustService.find(session.getUserId(), contactId);
 				
 				if (circles != null && !circles.isEmpty())
 					trustService.delete(circles.get(0));
 				
 			    return ResponseEntity.status(HttpStatus.OK).body(null);
+			}
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+    }	
+	
+	/**
+	 * Search potential contacts in the whole database 
+	 * @param sessionId Session Token Id
+	 * @param q Text to search for Full Names or Emails on potential contacts
+	 * @param order Field name for ordering
+	 * @param direction ASC or DESC
+	 * @return List of potential contacts found for the selected query
+	 */
+	@GetMapping(value="", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<Contact>> findContacts(
+    		@RequestHeader("Authorization") String sessionId,
+    		@RequestParam String q,
+    		@RequestParam String order,
+    		@RequestParam String direction) {
+		try {
+			Session session = sessionService.read(sessionId);
+			
+			if (session != null) {
+				if (!sessionService.check(session))
+					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
+					
+				return ResponseEntity.status(HttpStatus.OK).body(
+						service.find(q, new Config(order, direction, 0, 1)));
 			}
 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

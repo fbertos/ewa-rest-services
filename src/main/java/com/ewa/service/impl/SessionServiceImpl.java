@@ -6,13 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ewa.dao.SessionRepository;
 import com.ewa.model.Session;
-import com.ewa.search.Config;
 import com.ewa.service.SessionService;
 
 @Service
@@ -37,9 +34,8 @@ public class SessionServiceImpl implements SessionService {
 		repository.delete(Session);
 	}
 
-	public List<Session> findByUserId(String userId, Config filter) {
-		PageRequest request = PageRequest.of(filter.getPage(), filter.getItemsperpage(), new Sort(Sort.Direction.valueOf(filter.getDirection()), filter.getOrder()));
-	    return repository.findByUserId(userId, request).getContent();
+	public List<Session> findByUserId(String userId) {
+	    return repository.findByUserId(userId).getContent();
 	}
 
 	public boolean check(Session session) {

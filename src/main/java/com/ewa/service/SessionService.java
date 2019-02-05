@@ -3,7 +3,6 @@ package com.ewa.service;
 import java.util.List;
 
 import com.ewa.model.Session;
-import com.ewa.search.Config;
 
 public interface SessionService {
 	public Session create(Session Session);
@@ -12,5 +11,5 @@ public interface SessionService {
 	public void delete(Session Session);
 	
 	public boolean check(Session session);
-	public List<Session> findByUserId(String userId, Config filter);
+	public List<Session> findByUserId(String userId);
 }

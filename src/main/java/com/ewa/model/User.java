@@ -79,6 +79,10 @@ public class User {
 		return new Contact(this.id, this.fullName, this.picture, this.email);
 	}
 
+	public Contact toUnknownContact() {
+		return new Contact(this.id, this.fullName, null, null);
+	}
+	
 	public String getPreferredContactId() {
 		return preferredContactId;
 	}

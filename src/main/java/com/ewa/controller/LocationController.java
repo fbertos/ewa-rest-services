@@ -51,7 +51,7 @@ public class LocationController {
 				if (!sessionService.check(session))
 					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
 				
-				List<CircleOfTrust> circles = trustService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
+				List<CircleOfTrust> circles = trustService.find(session.getUserId(), contactId);
 				
 				if (circles != null && !circles.isEmpty())
 					return ResponseEntity.status(HttpStatus.OK).body(locationService.find(contactId, new Date(), new Config(order, direction, page, itemsperpage)));

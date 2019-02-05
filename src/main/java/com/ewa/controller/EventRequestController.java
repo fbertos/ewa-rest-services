@@ -81,7 +81,7 @@ public class EventRequestController {
 			if (user == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-			List<EventRequest> list = eventService.find(session.getUserId(), contactId, eventId, new Config("userId", "ASC", 0, 1));
+			List<EventRequest> list = eventService.find(session.getUserId(), contactId, eventId);
 			
 			if (list != null && !list.isEmpty())
 				return ResponseEntity.status(HttpStatus.OK).body(list.get(0));
@@ -120,7 +120,7 @@ public class EventRequestController {
 			if (user == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-			List<EventRequest> list = eventService.find(session.getUserId(), contactId, eventId, new Config("userId", "ASC", 0, 1));
+			List<EventRequest> list = eventService.find(session.getUserId(), contactId, eventId);
 			
 			if (list != null && !list.isEmpty()) {
 				EventRequest request = list.get(0);

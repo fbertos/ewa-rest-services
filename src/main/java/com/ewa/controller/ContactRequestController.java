@@ -6,24 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ewa.model.Contact;
 import com.ewa.model.ContactRequest;
 import com.ewa.model.Session;
 import com.ewa.model.User;
-import com.ewa.search.Config;
 import com.ewa.service.ContactRequestService;
 import com.ewa.service.SessionService;
 import com.ewa.service.UserService;
 
+/**
+ * Rest controller managing contact requests from one user to another
+ * @author fbertos
+ *
+ */
 @RestController
 @RequestMapping("/ewa/contact/request")
 public class ContactRequestController {
@@ -35,32 +36,13 @@ public class ContactRequestController {
 	
 	@Autowired
 	private ContactRequestService contactService;
-
-	@GetMapping(value="", produces = "application/json")
-    public @ResponseBody ResponseEntity<List<Contact>> findContacts(
-    		@RequestHeader("Authorization") String sessionId,
-    		@RequestParam String q,
-    		@RequestParam String order,
-    		@RequestParam String direction) {
-		try {
-			Session session = service.read(sessionId);
-			
-			if (session != null) {
-				if (!service.check(session))
-					return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);		
-					
-				return ResponseEntity.status(HttpStatus.OK).body(
-						userService.find(q, new Config(order, direction, 0, 1)));
-			}
-
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-    }
 	
+	/**
+	 * Send a contact request from one user to another
+	 * @param sessionId Session Token Id
+	 * @param contactId Contact ID to be in contact
+	 * @return New contact request created
+	 */
 	@PostMapping(value="/{contactId}", produces = "application/json")
     public @ResponseBody ResponseEntity<ContactRequest> requestContact(
     		@RequestHeader("Authorization") String sessionId,
@@ -80,7 +62,7 @@ public class ContactRequestController {
 			if (user == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-			List<ContactRequest> list = contactService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
+			List<ContactRequest> list = contactService.find(session.getUserId(), contactId);
 			
 			if (list != null && !list.isEmpty())
 				return ResponseEntity.status(HttpStatus.OK).body(list.get(0));
@@ -99,6 +81,12 @@ public class ContactRequestController {
 		}
     }
 	
+	/**
+	 * Reject a contact request received from an user
+	 * @param sessionId Session Token Id
+	 * @param contactId Contact ID that sends the request
+	 * @return Status 200 if all ok
+	 */
 	@DeleteMapping(value="/{contactId}", produces = "application/json")
     public @ResponseBody ResponseEntity<ContactRequest> rejectContact(
     		@RequestHeader("Authorization") String sessionId,
@@ -118,7 +106,7 @@ public class ContactRequestController {
 			if (user == null)
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
-			List<ContactRequest> list = contactService.find(session.getUserId(), contactId, new Config("userId", "ASC", 0, 1));
+			List<ContactRequest> list = contactService.find(session.getUserId(), contactId);
 			
 			if (list != null && !list.isEmpty()) {
 				ContactRequest request = list.get(0);
