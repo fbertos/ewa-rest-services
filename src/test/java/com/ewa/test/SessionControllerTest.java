@@ -24,7 +24,7 @@ import org.junit.Rule;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SessionController {
+public class SessionControllerTest {
 	@Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
 	

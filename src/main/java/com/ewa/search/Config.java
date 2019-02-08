@@ -1,5 +1,10 @@
 package com.ewa.search;
 
+/**
+ * Search configuration parameters
+ * @author fbertos
+ *
+ */
 public class Config {
 	private String order;
 	private String direction;

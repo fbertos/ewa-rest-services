@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.ewa.model.CircleOfTrust;
 
+/**
+ * Interface for service of contacts among users
+ * @author fbertos
+ *
+ */
 public interface CircleOfTrustService {
 	public CircleOfTrust create(CircleOfTrust CircleOfTrust);
 	public void update(CircleOfTrust CircleOfTrust);

@@ -2,6 +2,11 @@ package com.ewa.model;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Model POJO for requests to attend events
+ * @author fbertos
+ *
+ */
 public class EventRequest {
 	@Id
 	private String id;

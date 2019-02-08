@@ -2,6 +2,11 @@ package com.ewa.model;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Model POJO for contact request among users
+ * @author fbertos
+ *
+ */
 public class ContactRequest {
 	@Id
 	private String id;

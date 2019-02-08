@@ -2,6 +2,11 @@ package com.ewa.model;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Model POJO for user information
+ * @author fbertos
+ *
+ */
 public class User {
 	@Id
 	private String id;

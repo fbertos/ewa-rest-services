@@ -4,6 +4,11 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Model POJO for location of contacts
+ * @author fbertos
+ *
+ */
 public class Location {
 	@Id
 	private String id;

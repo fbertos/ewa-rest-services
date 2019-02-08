@@ -4,6 +4,11 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Model POJO for planned events
+ * @author fbertos
+ *
+ */
 public class Event {
 	@Id
 	private String id;

@@ -2,6 +2,11 @@ package com.ewa.model;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Model POJO for contact relationships between users
+ * @author fbertos
+ *
+ */
 public class CircleOfTrust {
 	@Id
 	private String id;

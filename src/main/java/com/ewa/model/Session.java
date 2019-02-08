@@ -4,6 +4,11 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * Model POJO for active sessions
+ * @author fbertos
+ *
+ */
 public class Session {
 	@Id
 	private String id;

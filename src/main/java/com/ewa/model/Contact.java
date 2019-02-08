@@ -1,5 +1,10 @@
 package com.ewa.model;
 
+/**
+ * Model POJO for contact information
+ * @author fbertos
+ *
+ */
 public class Contact {
 	private String id;
 	private String fullName;
