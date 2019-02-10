@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.ewa.model.EventRequest;
 
+/**
+ * Service interface for event attendee request management
+ * @author fbertos
+ *
+ */
 public interface EventRequestService {
 	public EventRequest create(EventRequest eventRequest);
 	public void update(EventRequest eventRequest);

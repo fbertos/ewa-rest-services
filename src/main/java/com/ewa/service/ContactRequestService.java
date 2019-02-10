@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.ewa.model.ContactRequest;
 
+/**
+ * Service interface for contact request management
+ * @author fbertos
+ *
+ */
 public interface ContactRequestService {
 	public ContactRequest create(ContactRequest contactRequest);
 	public void update(ContactRequest contactRequest);

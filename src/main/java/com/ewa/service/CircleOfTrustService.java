@@ -5,7 +5,7 @@ import java.util.List;
 import com.ewa.model.CircleOfTrust;
 
 /**
- * Interface for service of contacts among users
+ * Service interface for contacts among users management
  * @author fbertos
  *
  */
