@@ -51,7 +51,7 @@ public class UserController {
     public @ResponseBody ResponseEntity<User> updateUser(
     		@RequestHeader("Authorization") String sessionId,
     		@RequestPart User user,
-    		@RequestPart(value = "file", required = false) MultipartFile picture) {
+    		@RequestPart(value = "picture", required = false) MultipartFile picture) {
 		try {
 			Session session = sessionService.read(sessionId);
 			

@@ -78,7 +78,7 @@ public class EventController {
     public @ResponseBody ResponseEntity<Event> createEvent(
     		@RequestHeader("Authorization") String sessionId,
     		@RequestPart Event event,
-    		@RequestPart(value = "file", required = false) MultipartFile picture) {
+    		@RequestPart(value = "picture", required = false) MultipartFile picture) {
 		try {
 			Session session = sessionService.read(sessionId);
 			
@@ -94,6 +94,11 @@ public class EventController {
 
 			event.setPicture(cryptoService.encodeBase64(picture.getBytes()));
 			event.setOwnerId(session.getUserId());
+			
+			if (event.getAddress() != null) {
+				event.getAddress().setDate(event.getDate());
+				event.getAddress().setUserId(event.getOwnerId());
+			}
 
 			Event current = service.create(event);
 			 
