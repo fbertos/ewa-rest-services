@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.ewa.model.Session;
 
+/**
+ * Service interface for user session management 
+ * @author fbertos
+ *
+ */
 public interface SessionService {
 	public Session create(Session Session);
 	public void update(Session Session);

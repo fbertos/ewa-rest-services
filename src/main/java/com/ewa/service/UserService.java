@@ -6,6 +6,11 @@ import com.ewa.model.Contact;
 import com.ewa.model.User;
 import com.ewa.search.Config;
 
+/**
+ * Service interface for user management
+ * @author fbertos
+ *
+ */
 public interface UserService {
 	public User create(User user);
 	public void update(User user);

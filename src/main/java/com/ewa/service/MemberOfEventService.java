@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.ewa.model.MemberOfEvent;
 
+/**
+ * Service interface for event membership management
+ * @author fbertos
+ *
+ */
 public interface MemberOfEventService {
 	public MemberOfEvent create(MemberOfEvent memberOfEvent);
 	public void update(MemberOfEvent memberOfEvent);
