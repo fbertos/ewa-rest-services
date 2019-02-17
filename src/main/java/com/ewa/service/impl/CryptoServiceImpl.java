@@ -10,8 +10,17 @@ import org.springframework.stereotype.Service;
 
 import com.ewa.service.CryptoService;
 
+/**
+ * Service implementation for crypto functions
+ * @author fbertos
+ *
+ */
 @Service
 public class CryptoServiceImpl implements CryptoService {
+	/*
+	 * (non-Javadoc)
+	 * @see com.ewa.service.CryptoService#encode(java.lang.String, java.lang.String)
+	 */
 	public String encode(String text, String password) throws Exception {
         Key aesKey = new SecretKeySpec(password.getBytes(), "AES");
         Cipher cipher = Cipher.getInstance("AES");
@@ -20,6 +29,10 @@ public class CryptoServiceImpl implements CryptoService {
         return Base64.encode(encrypted);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.ewa.service.CryptoService#decode(java.lang.String, java.lang.String)
+	 */
 	public String decode(String text, String password) throws Exception {
         Key aesKey = new SecretKeySpec(Base64.decode(password), "AES");
         Cipher cipher = Cipher.getInstance("AES");
@@ -28,6 +41,10 @@ public class CryptoServiceImpl implements CryptoService {
         return decrypted;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.ewa.service.CryptoService#encodeBase64(byte[])
+	 */
 	public String encodeBase64(byte[] text) throws Exception {
 		return Base64.encode(text);
 	}
